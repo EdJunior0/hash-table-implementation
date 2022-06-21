@@ -34,6 +34,38 @@ func searchEmptyNode(node *node, colisions *int) *node {
 	return searchEmptyNode(node.prox, colisions)
 }
 
+func hash2(key int) int64 {
+	multipliedKey := key * key
+	keyInString := strconv.FormatInt(int64(multipliedKey), 2)
+	// fmt.Println("key in binary = ", keyInString)
+	// fmt.Println("size of string = ", len(keyInString))
+	halfOfString := int(len(keyInString) / 2)
+	// fmt.Println("half of string = ", halfOfString)
+	differenceOfHalf := int((len(keyInString) - halfOfString) / 2)
+	// fmt.Println("difference of half = ", differenceOfHalf)
+
+	mask := ""
+
+	for i := 0; i < len(keyInString); i++ {
+		if i < differenceOfHalf || i > halfOfString+differenceOfHalf {
+			mask += "0"
+		}
+		if i >= differenceOfHalf && i < halfOfString+differenceOfHalf {
+			mask += "1"
+		}
+	}
+
+	// fmt.Println("mask = ", mask)
+	firstNumber, _ := strconv.ParseInt(keyInString, 2, 64)
+	secondNumber, _ := strconv.ParseInt(mask, 2, 64)
+	composed := firstNumber & secondNumber
+	myKey := composed >> int64(differenceOfHalf)
+
+	// fmt.Println("Key =", myKey)
+
+	return myKey
+}
+
 func main() {
 
 	input, err := os.ReadFile("input.txt")
@@ -46,7 +78,7 @@ func main() {
 
 	for index, value := range inputSplited {
 		valueInt, _ := strconv.Atoi(value)
-		hash := hash(valueInt, hashTableSize)
+		hash := hash2(valueInt)
 		nodeWithKey := node{key: valueInt, prox: nil}
 		if index != 0 {
 			if slice[hash].key == 0 {

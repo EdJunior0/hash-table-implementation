@@ -8,4 +8,4 @@ In this repo, an implementation of the hash table in the Golang language was mad
 2. Access the repository you want to clone;
 3. Enter the command line: git clone https://github.com/EdJunior0/hash-table-implementation.git
 4. After cloning the project, enter in folder and open your terminal;
-5. Paste: go main.go
+5. Paste: go run main.go
